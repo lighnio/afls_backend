@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const Db = require("./db/connection");
+const { json } = require("express/lib/response");
 
 /*********************/
 //   Initializations
@@ -60,7 +61,7 @@ router.route("/").get((req, res) => {
 // Admins
 router.route("/administradores").get(async (req, res) => {
   Db.getAdmins().then((dat) => {
-    console.log(dat.recordsets[0][0]);
+    console.log(dat.recordsets[0]);
     res.json({admins: dat.recordsets[0]});
   });
 });
@@ -68,9 +69,34 @@ router.route("/administradores").get(async (req, res) => {
 //Clients
 router.route("/clientes").get(async (req, res) => {
   Db.getClients().then((dat) => {
-    res.json(dat.recordsets);
+    res.json({clientes: dat.recordsets[0]});
   });
 });
+
+router.route("/clientes/:id").get(async (req, res) => {
+  Db.getClient(req.params.id).then((dat) => {
+    res.json({clientes: dat.recordsets[0]});
+  });
+});
+
+router.route("/clientes/nuevo").post( async (req, res) => {
+  Db.insClient(req.body).then(data => {
+    res.status(201).json(data);
+  }).catch(err => {console.log(err)})
+});
+
+router.route("/clientes/eliminar/:id").delete( async (req, res) => {
+  Db.delClient(req.params.id).then(data => {
+    res.status(200).json(data);
+  }).catch(err => {console.log(err)})
+});
+
+router.route("/clientes/actualizar/:id").put( async (req, res) => {
+  Db.updClient(req.params.id, req.body).then(data => {
+    res.status(200).json(data);
+  }).catch(err => {console.log(err)})
+});
+
 
 // Mob
 router.route("/mobiliario").get(async (req, res) => {
