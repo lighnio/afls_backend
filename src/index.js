@@ -61,12 +61,11 @@ router.route("/").get((req, res) => {
 // Admins
 router.route("/administradores").get(async (req, res) => {
   Db.getAdmins().then((dat) => {
-    console.log(dat.recordsets[0]);
     res.json({admins: dat.recordsets[0]});
   });
 });
 
-//Clients
+//Clientes
 router.route("/clientes").get(async (req, res) => {
   Db.getClients().then((dat) => {
     res.json({clientes: dat.recordsets[0]});
@@ -98,28 +97,79 @@ router.route("/clientes/actualizar/:id").put( async (req, res) => {
 });
 
 
+// Pedidos
+router.route("/pedidos").get(async (req, res) => {
+  Db.getPed().then((dat) => {
+    res.json({"pedidos": dat.recordsets[0]});
+  });
+  });
+  router.route("/pedidos/:id").get(async (req, res) => {
+  Db.getPedido(req.params.id).then((dat) => {
+    res.json(dat.recordsets[0][0]);
+  }).catch(err => {console.log(err)});
+});
+router.route("/pedidos/actualizar/:id").put(async (req, res) => {
+  Db.updPedido(req.params.id, req.body).then((dat) => {
+    res.json(dat.recordsets);
+  }).catch(err => {console.log(err)});
+});
+router.route("/pedidos/nuevo").post(async (req, res) => {
+  Db.insPedido(req.body).then((dat) => {
+    res.json(dat.recordsets);
+  });
+});
+router.route("/pedidos/eliminar/:id").get(async (req, res) => {
+  Db.getPed(req.params.id).then((dat) => {
+    res.json(dat.recordsets);
+  });
+});
+
+
 // Mob
 router.route("/mobiliario").get(async (req, res) => {
   Db.getMobi().then((dat) => {
+    res.json({mobiliario: dat.recordsets[0]});
+  });
+});
+router.route("/mobiliario/:id").get(async (req, res) => {
+  Db.getOneMobi(req.params.id).then((dat) => {
+    res.json({mobiliario: dat.recordsets[0]});
+  });
+});
+router.route("/mobiliario/actualizar/:id").put(async (req, res) => {
+  Db.updMobi(req.params.id, req.body).then((dat) => {
     res.json(dat.recordsets);
   });
 });
+router.route("/mobiliario/nuevo").post(async (req, res) => {
+  Db.insMobi(req.body).then((dat) => {
+    res.json(dat.recordsets);
+  });
+});
+router.route("/mobiliario/eliminar/:id").delete(async (req, res) => {
+  Db.delMobi(req.params.id).then((dat) => {
+    res.json(dat.recordsets);
+  });
+});
+
 
 // Mueb
-router.route("/muebles").get(async (req, res) => {
-  Db.getMueb().then((dat) => {
-    res.json(dat.recordsets);
+router.route("/inventario").get(async (req, res) => {
+  Db.getInventario().then((dat) => {
+    res.json({inventario: dat.recordsets[0]});
   });
 });
 
-// Peds
-router.route("/pedidos").get(async (req, res) => {
-  Db.getPed().then((dat) => {
-    res.json(dat.recordsets);
-  });
+
+// Get estado de cuenta
+router.route("/estadocuenta").post(async (req, res) => {
+  Db.getEstCu(req.body).then((dat) => {
+    console.log(dat);
+    res.json({estadocuenta: dat.recordset});
+  }).catch(err => {console.log(err)});
 });
 
 // Default
 router.route("*").get(async (req, res) => {
-  res.json({ result: "This page don't exists." });
+  res.json({ result: "Not recognized route." });
 });
