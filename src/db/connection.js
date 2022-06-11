@@ -15,7 +15,7 @@ const getAdmins = async () => {
 const getClients = async () => {
   const pool = await sql.connect(config);
   const clients = pool.request()
-  .execute('GetClientes');
+  .execute('GetClientes');  
   return clients;
 };
 
@@ -79,21 +79,21 @@ const updPedido = async (id, pedido) => {
   const pool = await sql.connect(config);
   console.log(id);
   console.log(pedido);
-  // aux = pedido.Item3.slice(0, 10).split('/');
-  // fecha_formateada = `${aux[2]}/${aux[1]}/${aux[0]}`;
-  // console.log(pedido);
-  // console.log(fecha_formateada);
-  // const datapedido = pool.request()
-  // .input('IdPedido', sql.Int, id)
-  // .input('Descripcion', sql.VarChar, pedido.Item1)
-  // .input('Direccion', sql.VarChar, pedido.Item2)
-  // .input('FechaYHora', sql.DateTime, fecha_formateada)
-  // .input('Estado', sql.Char, pedido.Item4)
-  // .input('IdAdmin', sql.TinyInt, pedido.Item7 | 1)
-  // .input('IdCliente', sql.Int, pedido.Item5)
-  // .input('Precio', sql.Money, pedido.Item6)
-  // .execute("UpdPedido");
-  // return datapedido;
+  aux = pedido.Item3.slice(0, 10).split('/');
+  fecha_formateada = `${aux[2]}/${aux[1]}/${aux[0]}`;
+  console.log(pedido);
+  console.log(fecha_formateada);
+  const datapedido = pool.request()
+  .input('IdPedido', sql.Int, id)
+  .input('Descripcion', sql.VarChar, pedido.Item1)
+  .input('Direccion', sql.VarChar, pedido.Item2)
+  .input('FechaYHora', sql.DateTime, fecha_formateada)
+  .input('Estado', sql.Char, pedido.Item4)
+  .input('IdAdmin', sql.TinyInt, pedido.Item7 | 1)
+  .input('IdCliente', sql.Int, pedido.Item5)
+  .input('Precio', sql.Money, pedido.Item6)
+  .execute("UpdPedido");
+  return datapedido;
 };
 
 const insPedido = async (pedido) => {
